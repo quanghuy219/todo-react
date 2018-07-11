@@ -65,6 +65,15 @@ class Main extends Component {
                             }  
                         </ul>
                     </section>
+
+                    <footer className="footer">
+                        <p className="todo-count">{this.state.todos.length} items left</p>
+                        <ul>
+                            <li><a href="#" className="selected">All</a></li>
+                            <li><a href="#">Active</a></li>
+                            <li><a href="#">Completed</a></li>
+                        </ul>
+                    </footer>
                 </div>
             </div>
         )

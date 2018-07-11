@@ -5,10 +5,13 @@ class Task extends Component {
     
     constructor(props) {
         super(props);
-        this.state = this.props.todo;
-        this.setState({
+        this.state = {
+            id: 0,
+            text: '',
+            status: '',
             editing: false
-        })
+        }
+        this.state = this.props.todo;
     }
 
     handleCheckbox = (e) => {
