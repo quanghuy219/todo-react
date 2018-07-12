@@ -8,7 +8,8 @@ class Main extends Component {
         this.state = {
             input: '',
             maxID: 0,
-            todos: []
+            todos: [],
+            viewTodos: []
         }
     }
 
@@ -37,18 +38,42 @@ class Main extends Component {
         }   
     }
 
-    deleteTask = (todoID) => {
-        let arr = [...this.state.todos];
-        let index = 0;
-        for(index in this.state.todos) {
-            if(this.state.todos[index].id === todoID)
-                break;
-        }
-        arr.splice(index,1);
+    deleteTask = (...todoID) => {
+        let arr = this.state.todos;
+        arr = arr.filter(todo => {
+            return !todoID.includes(todo.id);
+        })
         this.setState({todos: arr});
     }
 
+    editTask = ({id, text, status}) => {
+        let arr = this.state.todos.map( todo => {
+            if(todo.id == id) {
+                todo = {id,text,status}
+            }
+            return todo;
+        } );
+        this.setState({
+            todos: arr
+        })
+    }
+
+    clearCompletedTasks = () => {
+        let arr = this.state.todos;
+        arr = arr.filter(todo => {
+            return todo.status === "completed"
+        })
+        .map(todo => todo.id)
+        this.deleteTask(...arr);
+    }
+
     render() {
+        let activeTasks = this.state.todos.filter(todo => {
+            return todo.status == "active";
+        })
+        let completedTasks = this.state.todos.filter(todo => {
+            return todo.status == "completed";
+        }) 
         return (
             <div className="container">
                 <div className="main">
@@ -60,19 +85,25 @@ class Main extends Component {
                         <ul className="todo-list">
                             {
                                 this.state.todos.map( todo => {
-                                    return <Task key={todo.id} todo={todo} deleteTask={this.deleteTask}/>
+                                    return <Task key={todo.id} todo={todo} deleteTask={this.deleteTask} editTask={this.editTask}/>
                                 })
                             }  
                         </ul>
                     </section>
 
                     <footer className="footer">
-                        <p className="todo-count">{this.state.todos.length} items left</p>
+                        <p className="todo-count">
+                            {
+                               activeTasks.length
+                            } items left
+                        </p>
                         <ul>
                             <li><a href="#" className="selected">All</a></li>
                             <li><a href="#">Active</a></li>
                             <li><a href="#">Completed</a></li>
                         </ul>
+
+                        <a href="#" className="clear" onClick={this.clearCompletedTasks}>Clear completed</a>
                     </footer>
                 </div>
             </div>

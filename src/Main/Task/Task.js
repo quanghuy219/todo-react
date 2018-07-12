@@ -6,24 +6,21 @@ class Task extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            id: 0,
-            text: '',
-            status: '',
+            id: this.props.todo.id,
+            text: this.props.todo.text,
+            status: this.props.todo.status,
             editing: false
         }
-        this.state = this.props.todo;
     }
 
-    handleCheckbox = (e) => {
-        if(e.target.checked) {
-            this.setState({
-                status: "completed"
-            })
-        } else {
-            this.setState({
-                status: "active"
-            })
-        }
+    handleCheckbox = (e) => { 
+        let currentStatus = e.target.checked ? "completed" : "active";
+        this.setState({
+            status: currentStatus
+        }, () => {
+            this.props.editTask(this.state);
+        })
+        
     }
 
     handleClickDeleteBtn = () => {
@@ -39,7 +36,10 @@ class Task extends Component {
     handleChange = (e) => {
         this.setState({
             text: e.target.value
+        }, () => {
+            this.props.editTask(this.state);
         })
+        
     }
 
     saveChanges = (e) => {
@@ -56,17 +56,17 @@ class Task extends Component {
         const listTodo = (
             <div className="view">
                     <input className="toggle" type="checkbox" onChange={this.handleCheckbox}/>
-                    <label className={this.state.status === "completed" ? "completed" : ""}>{this.state.text}</label>
+                    <label className={this.state.status === "completed" ? "completed" : ""} onDoubleClick={this.editTodo}>{this.state.text}</label>
                     <button className="delete" onClick={this.handleClickDeleteBtn}><i className="fa fa-times"></i></button>
                 </div>
         )
         const editInput = (
-            <input className="edit" value={this.state.text} onChange={this.handleChange} onBlur={this.saveChanges} onKeyDown={this.handleKeyDown}  />
+            <input className="edit" value={this.state.text} onChange={this.handleChange} onBlur={this.saveChanges} onKeyDown={this.handleKeyDown}  autoFocus/>
         )
             
         
         return (
-            <li className={this.state.editing ? "editing" : ""} onDoubleClick={this.editTodo}>
+            <li className={this.state.editing ? "editing" : ""} >
                {
                    this.state.editing ? editInput : listTodo
                }
