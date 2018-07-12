@@ -9,7 +9,7 @@ class Main extends Component {
             input: '',
             maxID: 0,
             todos: [],
-            viewTodos: []
+            view: ["active", "completed"]
         }
     }
 
@@ -67,6 +67,17 @@ class Main extends Component {
         this.deleteTask(...arr);
     }
 
+    // default value: all tasks
+    updateView = (status = ["active","completed"]) => {
+        this.setState({
+            view: status
+        })
+    }
+
+    toggleAll = (e) => {
+        
+    } 
+
     render() {
         let activeTasks = this.state.todos.filter(todo => {
             return todo.status == "active";
@@ -74,17 +85,23 @@ class Main extends Component {
         let completedTasks = this.state.todos.filter(todo => {
             return todo.status == "completed";
         }) 
+       
         return (
             <div className="container">
                 <div className="main">
+                   
                     <section id="input-form">
                         <input value={this.state.input} onChange={this.handleChange} onKeyDown={this.handleKeyDown} placeholder="What needs to be done?"/>
                     </section>
 
-                    <section>
+                    <section id="todo-list">
+                        <input className="toggle-all" type="checkbox" onChange={this.toggleAll}/>
                         <ul className="todo-list">
                             {
-                                this.state.todos.map( todo => {
+                                this.state.todos.filter(todo => {
+                                    return this.state.view.includes(todo.status)
+                                })
+                                .map( todo => {
                                     return <Task key={todo.id} todo={todo} deleteTask={this.deleteTask} editTask={this.editTask}/>
                                 })
                             }  
@@ -98,12 +115,30 @@ class Main extends Component {
                             } items left
                         </p>
                         <ul>
-                            <li><a href="#" className="selected">All</a></li>
-                            <li><a href="#">Active</a></li>
-                            <li><a href="#">Completed</a></li>
+                            <li><a href="#" className={this.state.view.toString() == ["active", "completed"].toString() ? "selected" : ""} onClick={
+                                () => {
+                                    this.updateView(["active","completed"])
+                                }
+                            }>
+                            All
+                            </a></li>
+                            <li><a href="#" className={this.state.view.toString() == ["active"].toString() ? "selected" : ""} onClick={
+                                () => {
+                                    this.updateView(["active"])
+                                }
+                            }>
+                            Active
+                            </a></li>
+                            <li><a href="#" className={this.state.view.toString() == ["completed"].toString() ? "selected" : ""} onClick={
+                                () => {
+                                    this.updateView(["completed"])
+                                } 
+                            }>
+                            Completed
+                            </a></li>
                         </ul>
 
-                        <a href="#" className="clear" onClick={this.clearCompletedTasks}>Clear completed</a>
+                        <a href="#" className="clear"  onClick={this.clearCompletedTasks} >Clear completed</a>
                     </footer>
                 </div>
             </div>

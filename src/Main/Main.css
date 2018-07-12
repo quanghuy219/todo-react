@@ -83,3 +83,25 @@ button:focus {
     border: 1px solid rgba(175, 47, 47, 0.2);
     border-radius: 5px;
 }
+#todo-list {
+    position: relative;
+}
+.toggle-all {
+    position: absolute;
+    left: 10px;
+    top: -50px;
+    appearance: none;
+}
+.toggle-all:focus {
+    outline: none;
+}
+.toggle-all:before {
+    content: "\f107";
+    font-family: FontAwesome;
+    font-size: 3em;
+    font-weight: 900;
+    opacity: 0.5;
+}
+.toggle-all:checked:before {
+    opacity: 1;
+}

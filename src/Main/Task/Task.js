@@ -55,7 +55,7 @@ class Task extends Component {
     render() {
         const listTodo = (
             <div className="view">
-                    <input className="toggle" type="checkbox" onChange={this.handleCheckbox}/>
+                    <input className="toggle" type="checkbox" onChange={this.handleCheckbox} checked={this.state.status === "completed" ? true : false}/>
                     <label className={this.state.status === "completed" ? "completed" : ""} onDoubleClick={this.editTodo}>{this.state.text}</label>
                     <button className="delete" onClick={this.handleClickDeleteBtn}><i className="fa fa-times"></i></button>
                 </div>
