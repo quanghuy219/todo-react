@@ -9,7 +9,8 @@ class Main extends Component {
             input: '',
             maxID: 0,
             todos: [],
-            view: ["active", "completed"]
+            view: ["active", "completed"],
+            countActive: 0,
         }
     }
 
@@ -75,17 +76,30 @@ class Main extends Component {
     }
 
     toggleAll = (e) => {
-        
+        let arr = [];
+        if(e.target.checked) {
+            arr = this.state.todos.map(todo => {
+                todo.status = "completed";
+                return todo;
+            })
+        } else {
+            arr = this.state.todos.map(todo => {
+                todo.status = "active"
+                return todo;
+            })
+        }
+        this.setState({
+            todos: arr  
+        })
     } 
 
     render() {
-        let activeTasks = this.state.todos.filter(todo => {
-            return todo.status == "active";
-        })
-        let completedTasks = this.state.todos.filter(todo => {
-            return todo.status == "completed";
-        }) 
-       
+        const show = {
+            dispay: "inherit"
+        }
+        const hide = {
+            display: "none"
+        }
         return (
             <div className="container">
                 <div className="main">
@@ -95,7 +109,11 @@ class Main extends Component {
                     </section>
 
                     <section id="todo-list">
-                        <input className="toggle-all" type="checkbox" onChange={this.toggleAll}/>
+                        <input className="toggle-all" style={ this.state.todos.length ? show : hide } type="checkbox" onChange={this.toggleAll} checked={
+                            !this.state.todos.filter(todo => {
+                                return todo.status == "active"
+                            }).length
+                        }/>
                         <ul className="todo-list">
                             {
                                 this.state.todos.filter(todo => {
@@ -108,10 +126,12 @@ class Main extends Component {
                         </ul>
                     </section>
 
-                    <footer className="footer">
+                    <footer className="footer" style={this.state.todos.length ? show : hide}>
                         <p className="todo-count">
                             {
-                               activeTasks.length
+                               this.state.todos.filter(todo => {
+                                   return todo.status == "active"
+                               }).length
                             } items left
                         </p>
                         <ul>
@@ -138,7 +158,7 @@ class Main extends Component {
                             </a></li>
                         </ul>
 
-                        <a href="#" className="clear"  onClick={this.clearCompletedTasks} >Clear completed</a>
+                        <button href="#" className="clear"  onClick={this.clearCompletedTasks} disabled={ this.state.todos.filter(todo => todo.status === "completed").length ? false : true}>Clear completed</button>
                     </footer>
                 </div>
             </div>
