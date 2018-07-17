@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import './Main.css';
 import Task from './Task/Task';
+import Footer from './Footer/Footer';
 
 class Main extends Component {
     constructor(props) {
@@ -126,40 +127,7 @@ class Main extends Component {
                         </ul>
                     </section>
 
-                    <footer className="footer" style={this.state.todos.length ? show : hide}>
-                        <p className="todo-count">
-                            {
-                               this.state.todos.filter(todo => {
-                                   return todo.status == "active"
-                               }).length
-                            } items left
-                        </p>
-                        <ul>
-                            <li><a href="#" className={this.state.view.toString() == ["active", "completed"].toString() ? "selected" : ""} onClick={
-                                () => {
-                                    this.updateView(["active","completed"])
-                                }
-                            }>
-                            All
-                            </a></li>
-                            <li><a href="#" className={this.state.view.toString() == ["active"].toString() ? "selected" : ""} onClick={
-                                () => {
-                                    this.updateView(["active"])
-                                }
-                            }>
-                            Active
-                            </a></li>
-                            <li><a href="#" className={this.state.view.toString() == ["completed"].toString() ? "selected" : ""} onClick={
-                                () => {
-                                    this.updateView(["completed"])
-                                } 
-                            }>
-                            Completed
-                            </a></li>
-                        </ul>
-
-                        <button href="#" className="clear"  onClick={this.clearCompletedTasks} disabled={ this.state.todos.filter(todo => todo.status === "completed").length ? false : true}>Clear completed</button>
-                    </footer>
+                    <Footer updateView={this.updateView} todos={this.state.todos} view={this.state.view} clearCompletedTasks={this.clearCompletedTasks}/>
                 </div>
             </div>
         )
